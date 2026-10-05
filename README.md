@@ -1,59 +1,90 @@
-# UniversoTotvs2026WithoutMcp
+# Universo TOTVS 2026 – Demo PO UI (sem MCP)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.22.
+Aplicação Angular de demonstração com um cadastro simples de **funcionários** feito com [PO UI](https://po-ui.io), a biblioteca de componentes Angular da TOTVS.
 
-## Development server
+## Contexto
 
-To start a local development server, run:
+Este projeto faz parte de uma apresentação sobre PO UI no **Universo TOTVS 2026**. Ele é uma de duas versões de um app de exemplo:
+
+- **Este repositório (sem MCP):** versão desenvolvida sem o apoio de um servidor MCP (Model Context Protocol).
+- **Repositório irmão (com MCP):** [universo-totvs-2026-mcp](https://github.com/pedrodominguesp/universo-totvs-2026-mcp), com um cadastro de clientes feito com apoio de MCP.
+
+A ideia é comparar o código das duas versões.
+
+> Observação: o `.vscode/mcp.json` gerado pelo Angular CLI (servidor `angular-cli`) também está presente aqui, com o mesmo conteúdo do repositório irmão.
+
+## Funcionalidades
+
+O layout principal (`src/app/app.html`) usa `po-toolbar` (título "Universo TOTVS 2026") e `po-menu` com o item "Funcionários", que leva à listagem.
+
+| Rota | Componente | Descrição |
+| --- | --- | --- |
+| `/` | `EmployeeListComponent` | Listagem de funcionários |
+| `/employees/new` | `EmployeeFormComponent` | Formulário de novo funcionário |
+| `**` | — | Qualquer outra rota redireciona para `/` |
+
+### Listagem de funcionários (`employee-list`)
+
+- `po-page-default` com a ação "Novo Funcionário", que navega para `/employees/new`.
+- `po-table` alimentada por `p-service-api` (`https://po-sample-api.onrender.com/v1/people`), com ordenação e linhas zebradas.
+- Busca em linguagem natural com IA (`p-search-ai-field`), usando o endpoint `https://po-sample-api.onrender.com/v1/ai/filter`, filtro aplicado no servidor, confiança mínima de 0.5 e timeout de 10 s. Resultado, baixa confiança (com percentual) e erro são exibidos como notificações (`PoNotificationService`).
+- Colunas: ID, Nome, E-mail, Cidade e Status. O status usa um template de coluna (`p-table-column-template`) com `po-tag` colorida e ícone para Ativo, Inativo e Pendente.
+
+### Novo funcionário (`employee-form`)
+
+- `po-page-edit` com as ações Salvar e Cancelar.
+- Campos: Nome (`po-input`, obrigatório), CPF (`po-input` com máscara `999.999.999-99`, obrigatório), Departamento (`po-combo`, obrigatório: Engenharia, Design, Gestão, Recursos Humanos, Financeiro) e Status (`po-switch`, Ativo/Inativo).
+- Ao salvar, o formulário é validado (`NgForm`). Se faltar campo obrigatório, aparece um aviso. Se estiver válido, os dados vão para o console, uma notificação de sucesso é exibida e o app volta para a listagem. Não existe chamada real de API para gravar.
+
+## Tecnologias
+
+Versões resolvidas no `package-lock.json`:
+
+- Angular 21.2 (`@angular/core` 21.2.21, `@angular/cli` e `@angular/build` 21.2.22), componentes standalone
+- PO UI: `@po-ui/ng-components` 21.30.0 e tema `@po-ui/style` 21.30.0 (`po-theme-default.min.css`)
+- TypeScript 5.9.3
+- RxJS 7.8.2 e Zone.js 0.15.1
+- Testes unitários com Vitest 4.1.11 e jsdom (builder `@angular/build:unit-test`)
+- Prettier 3
+
+## Pré-requisitos
+
+- Node.js `^20.19.0`, `^22.12.0` ou `>=24.0.0` (exigido pelo Angular 21)
+- npm (o `package.json` declara `packageManager: npm@12.0.2`)
+- Acesso à internet: a tabela e a busca por IA consomem a API pública `po-sample-api.onrender.com`
+
+## Como instalar e rodar
 
 ```bash
-ng serve
+npm install
+npm start          # ng serve, em http://localhost:4200/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Outros scripts:
 
 ```bash
-ng generate component component-name
+npm run build      # ng build (configuração de produção, saída em dist/)
+npm run watch      # ng build --watch --configuration development
+npm test           # ng test (Vitest)
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Estrutura de pastas
 
-```bash
-ng generate --help
+```text
+.
+├── .vscode/                  # launch, tasks, extensões e mcp.json padrão do Angular CLI
+├── public/                   # favicon
+├── src/
+│   ├── index.html
+│   ├── main.ts
+│   ├── styles.css
+│   └── app/
+│       ├── app.ts / app.html # layout com po-toolbar e po-menu
+│       ├── app.config.ts     # router, HttpClient e PoHttpRequestModule
+│       ├── app.routes.ts
+│       ├── app.spec.ts
+│       ├── employee-list/    # listagem de funcionários
+│       └── employee-form/    # formulário de novo funcionário
+├── angular.json
+└── package.json
 ```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
