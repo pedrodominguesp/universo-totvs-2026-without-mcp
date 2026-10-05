@@ -1,0 +1,24 @@
+<po-page-default p-title="Funcionários" [p-actions]="pageActions">
+  <po-table
+    [p-columns]="columns"
+    [p-service-api]="serviceApi"
+    [p-search-ai-field]="searchAiField"
+    [p-sort]="true"
+    [p-striped]="true"
+    [p-show-more-disabled]="false"
+    [p-height]="0"
+    (p-sort-by)="onSortBy($event)"
+    (p-search-ai-result)="onAiResult($event)"
+    (p-search-ai-low-confidence)="onAiLowConfidence($event)"
+    (p-search-ai-error)="onAiError($event)"
+  >
+    <ng-template p-table-column-template [p-property]="'status'" let-value>
+      <po-tag
+        [p-value]="statusLabels[value] || value"
+        [p-color]="statusColors[value] || 'color-12'"
+        [p-icon]="statusIcons[value]"
+      >
+      </po-tag>
+    </ng-template>
+  </po-table>
+</po-page-default>

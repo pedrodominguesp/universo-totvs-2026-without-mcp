@@ -1,12 +1,25 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
+import {
+  PoMenuItem,
+  PoMenuModule,
+  PoToolbarModule
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    PoToolbarModule,
+    PoMenuModule
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css'],
 })
 export class App {
-  protected readonly title = signal('universo-totvs-2026-without-mcp');
+  readonly menus: Array<PoMenuItem> = [
+    { label: 'Funcionários', icon: 'an an-user', link: '/' }
+  ];
 }

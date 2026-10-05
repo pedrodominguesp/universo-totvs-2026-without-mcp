@@ -1,0 +1,56 @@
+<po-page-edit
+  p-title="Novo Funcionário"
+  (p-save)="save()"
+  (p-cancel)="cancel()"
+>
+  <form #employeeForm="ngForm">
+    <div class="po-row">
+      <po-input
+        class="po-md-6"
+        name="name"
+        p-label="Nome"
+        p-placeholder="Nome completo"
+        p-required
+        p-clean
+        [(ngModel)]="employee.name"
+      >
+      </po-input>
+
+      <po-input
+        class="po-md-6"
+        name="cpf"
+        p-label="CPF"
+        p-placeholder="000.000.000-00"
+        p-mask="999.999.999-99"
+        p-required
+        p-clean
+        [(ngModel)]="employee.cpf"
+      >
+      </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-combo
+        class="po-md-6"
+        name="department"
+        p-label="Departamento"
+        p-placeholder="Selecione o departamento"
+        p-required
+        [p-options]="departments"
+        [ngModel]="employee.department"
+        (ngModelChange)="employee.department = $event"
+      >
+      </po-combo>
+
+      <po-switch
+        class="po-md-6"
+        name="active"
+        p-label="Status"
+        p-label-on="Ativo"
+        p-label-off="Inativo"
+        [(ngModel)]="employee.active"
+      >
+      </po-switch>
+    </div>
+  </form>
+</po-page-edit>
